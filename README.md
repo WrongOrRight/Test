@@ -1,2 +1,2 @@
-# Lottery DPR
+﻿# Lottery DPR
 НАЦИАНАЛЬНАЯ ЛОТЕРЕЯ ДНР

@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.web</groupId>
-    <artifactId>mytest</artifactId>
+    <artifactId>mavenproject6</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>TestProject</name>
+    <name>XLSLoader</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -245,6 +245,13 @@
             <artifactId>commons-io</artifactId>
             <version>1.3.2</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>

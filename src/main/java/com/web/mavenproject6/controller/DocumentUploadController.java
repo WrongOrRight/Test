@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.web.mytest.controller;
+package com.web.mavenproject6.controller;
 
-import com.web.mytest.other.XLSParser;
+import com.web.mavenproject6.other.XLSParser;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
