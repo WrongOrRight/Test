@@ -1,0 +1,123 @@
+body
+{
+    background: white;
+}
+
+* {
+    position: absolute;
+    z-index: 1;
+}
+
+.bg
+{
+    z-index: 0;
+    position: absolute;
+    width: 450px;
+    height: 250px;
+    top: 0px;
+}
+
+.tricolor
+{
+    z-index: 0;
+    position: absolute;
+    width: 700px;
+    height: 220px;
+    top: 0px;
+}
+
+.tiket-box
+{
+    width: 450px;
+    height: 250px;
+    overflow: hidden;
+    position:relative;
+    margin: 0 auto;
+}
+
+.top-text-1 h1
+{
+    font-size: 25pt;
+    width: 350px;
+    margin-left: 10px;
+    margin-top: 10px;
+    color: #fff4f4;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-weight: 200;
+
+}
+
+.top-text-2 p
+{
+    font-size: 20pt;
+    width: 300px;
+    top:40px;
+    color: white;
+    margin-left: 10px;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-weight: 200;
+}
+
+.white-rect
+{
+    width: 120px;
+    height: 120px;
+    background: white;
+    position: absolute;
+    top: 65px;
+    left: 168px;
+}
+
+.qr-code img
+{
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    top: 59px;
+    left: 164px;
+}
+
+.eagle img 
+{
+    width: 120px;
+    height: 110px;
+    position: absolute;
+    top: 70px;
+    left: 168px;
+}
+
+.data p
+{
+    font-size: 11pt;
+    margin-left: 10px;
+    top: 187px;
+    color: white;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-weight: 200;
+    margin-left: 205px;
+    position: absolute;
+}
+
+.price h1
+{
+    font-size: 62pt;
+    margin-left: 10px;
+    margin-top: 10px;
+    color: white;
+    font-family: 'PT Sans Narrow', sans-serif;
+    margin-left: 325px;
+    top: 155px;
+    font-weight: 200;
+}
+
+.price h2
+{
+    font-size: 42pt;
+    margin-left: 10px;
+    margin-top: 10px;
+    color: white;
+    font-family: 'PT Sans Narrow', sans-serif;
+    margin-left: 410px;
+    top: 178px;
+    font-weight: 200;
+}
