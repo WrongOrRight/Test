@@ -5,9 +5,12 @@
  */
 package com.web.mavenproject6.controller;
 
+import com.web.mavenproject6.entities.Promotion;
 import com.web.mavenproject6.forms.UserForm;
-import com.web.mavenproject6.service.UserService;
+import com.web.mavenproject6.service.PromotionService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
@@ -16,6 +19,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,80 +37,59 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController {
 
     @Autowired
-    UserDetailsService myUserDetailsService;
+    @Qualifier("PromotionService")
+    PromotionService promoService;
 
     @Autowired
-    @Qualifier("UserService")
-    UserService userService;
+    Environment env;
 
     @RequestMapping(value = {"/"})
     public String loginPage(Model model, @RequestParam(required = false) String message) throws IOException {
 
-        System.out.print("aaa!!!11");
-        Document document = Jsoup.connect("http://rozetka.com.ua/").get();
-
-        Elements elements = document.select("script");
-
-        Pattern p = Pattern.compile("(\\{\"pages\":\\[)(.+)(\\])"); // Regex for the value of the key
-        Matcher m = p.matcher(elements.html()); // you have to use html here and NOT text! Text will drop the 'key' part
-        String buf = "";
-        while (m.find(1)) {
-            buf += m.group();
-
-            buf += "[" + m.group(1) + "]"; // value only
-        }
-        System.out.println("aaa4!!" + buf + "<br>" + elements.html());
-
-        Pattern p1 = Pattern.compile("(http:.{0,40}big_promo)(.{0,60})\\.(jpg)"); // Regex for the value of the key
-        Matcher m1 = p1.matcher(buf); // you have to use html here and NOT text! Text will drop the 'key' part
+        Document document = Jsoup.connect("https://rozetka.com.ua/").get();
+        Elements elements = document.select("body");
+        System.out.println("bufff1!" + elements.html());
+        Pattern p = Pattern.compile("(\\{\"pages\":\\[)(.+)(\\])");
+        Matcher m = p.matcher(elements.html());
+        String buf = m.find() ? m.group() : "";
+        System.out.println("bufff2!" + buf);
+        Pattern p1 = Pattern.compile("(http:.{0,40}big_promo)(.{0,60})\\.(jpg)");
+        Matcher m1 = p1.matcher(buf);
+        Pattern p2 = Pattern.compile("(http:.{0,40}promotions)(.{0,60})\\.(html)");
+        Matcher m2 = p2.matcher(buf);
 
         String buf1 = "";
-
-        while (m1.find()) {
-            buf1 += "<img src=" + m1.group() + "><br>"; // the whole key ('key = value')
-            //  buf+="["+m.group(1)+"]"; // value only
-        }
-
-        Pattern p2 = Pattern.compile("(http:.{0,40}promotions)(.{0,60})\\.(html)"); // Regex for the value of the key
-        Matcher m2 = p2.matcher(buf); // you have to use html here and NOT text! Text will drop the 'key' part
-        int index = 0;
-        while (m2.find()) {
-            String s = m2.group().replaceAll("/", "");
-
-            buf1 += "<a href=" + s + ">" + s + "</a><br>";
+        m1.find(0);
+        m2.find(0);
+        for (int i = 0; i < Math.min(m1.groupCount(), m2.groupCount()); i++) {
+            String imgBuf = m1.group();
+            String linkBuf = m2.group().replaceAll("\\\\", "");
+            String promoInfo = "";
+            String promoTime = "";
+            buf1 += "<a href=" + linkBuf + ">" + linkBuf + "</a><br>";
             try {
-           
-                if (index == 0) {
-                    Document document2 = Jsoup.connect("http://rozetka.com.ua/news-articles-promotions/promotions/acer_aspire_notebook_0909.html").get();
 
-                    Elements elements2 = document2.select(".promo-details-banner-info-text");
-                    buf1 += elements2.html();
-                }
+                Document document2 = Jsoup.connect(linkBuf).get();
+                Elements elements2 = document2.select(".promo-details-banner-info-text");
+                promoInfo = elements2.html();
+                buf1 += promoInfo;
+                Elements elements3 = document2.select(".promo-details-banner-remark");
+                promoTime = elements3.html();
+                buf1 += promoTime;
 
-                if (index == 1) {
-                    Document document2 = Jsoup.connect("http://rozetka.com.ua/news-articles-promotions/promotions/acer_aspire_notebook_0909.html").get();
-
-                    Elements elements2 = document2.select(".promo-details-banner-info-text");
-                    buf1 += elements2.html();
-                }
-                
-                 if (index >1) {
-                   
-                    Document document2 = Jsoup.connect(s).get();
-
-                    Elements elements2 = document2.select(".promo-details-banner-info-text");
-                    buf1 += elements2.html();
-                }
-
-                index++;
             } catch (Exception e) {
-                System.out.println("aaa!!ERROR" + e);
-            }
 
-            // Elements elements3 = document2.select(".promo-details-banner-remark");
-            //buf1 += elements3.html();
+            }
+            Promotion pp = new Promotion();
+            pp.setPictureURL(imgBuf);
+            pp.setPromoURL(linkBuf);
+            pp.setTiming(promoTime);
+            pp.setTitle(promoInfo);
+
+            promoService.getRepository().save(pp);
+            m1.find();
+            m2.find();
         }
-        //System.out.println("aaa2!!" + buf1);
 
         model.addAttribute("text", buf1);
         return "jsp/index";
